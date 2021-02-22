@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "peritumbot-uvbc",
+  "private_key_id": "4051f4e9b03ce10c82fc8e0fa3228b6de409009a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCgwSqp56WciGSz\n2bbpQ8BTlf7m8YwbRby69gAn1a0KrAcTF5WQ7o2+FbbpO4g134ZBKNdGeCmBJZF6\nZMtMZKcLuD4ldw13g6r9WJBSg3XayECu7LGR61v0dLkTW9X9CdQF2D0TCv+VayX2\n7+A6R7rDa+AU8AD1efQGmdMbV9Kmj+7nl2UCcnDo3pHtDNS7GbtMAkigyBgUx7qO\nn8HBB6Kjh3nUh5KBWs+YCrKUa7FwwBGxA6Z63UV3XddeWvbQ0Pim9XUVLH0TOc+y\nJWSzZbZUczhuCJRqbbgCHuAGpNnaXh4V+w02aZJqIPTbtx35HPd36SJJt+ht69Nj\ngN82gIqZAgMBAAECggEADTSpJFGBB5mlyieDsOhtq4AqMz8bDx98uFAepacWQsbs\ngttAYGpUbw3aG5FWKHTPEtm/y4xx/me/anJOyB0JovsU8d90lgGVQaAtpPWjMCCc\nvbH4iV/wCyYukQJNky6kQgGoTMDty5DEiuNcRHVhiI27WAT6UzAcRZGL59ZgWene\nEunrXjn1KaZv99LoQVVW9nnyKHlI24wKbVMhy+i3YFb9zKwD0TWw8qAm9zsfsp+i\nI0TcKkhaboB6jULXmhgiaEHKDeCPm8aof0tygsXxalCmO1tU62YBil4txEl+v48F\nHYI3vwYZKR/rTuDs2brRZBAkZZz8rui9g+dVIGg3TQKBgQDeJLcY/SyznC4LMJm6\nmfdIjKOZtR1WMhz4TWHaaL2bXnKJyR7ky47Z8prm11/BmhcgRPZr6jrl8jIlNpCB\n7WbLiAufSGGLWMS5ZPgyyWNwnCVagKchPBXt6dES/y4AKzXLnmE8rcd5JkCDKcxK\nflkwLXVXmRGr4Vj6VTbhSL75PQKBgQC5QUQFTlqbhY4hOifBKbN2knyM7QBL/fEr\nohZlNYd2Qw4ntOA1ihLZkIJ9oWRKAZsnIo/+6wDMWK34R/ClaqkxRlLMywov5YBt\nQv3R9WZADJWYN8tO12yVc11U5PpKRPPdnEg3uwhAjhZenPLEnNasj6whDanlTIPN\nPpuKIcKUjQKBgBCNJcNL4c/EHD4jMeEQZbdXGz1xnCz28OejRF40naP85oXToWSk\nshEVHWuDspPHOl/iI4Yo3piRciEJrryvhpA1o8ALcZEjXQz/M+r8zFbwm2vh2BIG\n2w9t83D56GCE165DL7WIsSsaqYXcUGdggJ6xVGPheMqYsLt+K+efNvN1AoGAUWdq\nemJp0jknsVYarfijEZFhBZQHM11NIn1BFgwlkEP67lu+wggALHYhwQ6wQQzfnpzD\nZaLiYOj+2UDTb/ykiDB8pdz6hv10J47uddo9qhtdiNvLjMOAxVNCSdGsYgJWnqTT\n3xlikOtezQhubRL2CjG/025rn4S1zfSa6GHZXOkCgYAG2laF7gU6tHJSbbXg7FxA\n+0tgacBoRNoVCh1qLSEbkbXcyoYKtgnvVAbGe/qrXMojMwdyAQoIq2Z0CEAQU8a4\n0lTEFDyNAKAGhZlqBIp32sjHo1ZAj6OyAhQd9571oiz2KICgloyze6SoSddZ/RCt\naTaKwAq8pG0CV9z2+TJajQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "peritumservice@peritumbot-uvbc.iam.gserviceaccount.com",
+  "client_id": "117403922752230930352",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/peritumservice%40peritumbot-uvbc.iam.gserviceaccount.com"
+}
