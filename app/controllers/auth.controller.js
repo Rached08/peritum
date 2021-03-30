@@ -162,6 +162,8 @@ exports.updateUser = (req, res) => {
 
 };
 
+
+
 exports.send = (req, res) => {
   if(req.body.content=="hi"){
     res.status(200).send({content: "hi, how are you?",image: "assets/images/bot.png", date: Date.now()});

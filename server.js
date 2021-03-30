@@ -243,6 +243,8 @@ const { skill } = require("./app/models");
     console.log(q1);
     console.log(r1);
 
+
+    
     if(q1=='101'){
       global.r1 = 1;
     }else r1 = 0;
