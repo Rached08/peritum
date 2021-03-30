@@ -2,14 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
-
+const chatbot = require("./app/controllers/dialogflow.controller");
 const app = express();
 
 global.__basedir = __dirname;
 
 
 var corsOptions = {
-    origin: "http://localhost:8081"
+    origin: "*"
 };
 
 app.use(cors(corsOptions));
@@ -45,6 +45,7 @@ app.get("/", (req, res) => {
 
 // routes
 require("./app/routes/auth.routes")(app);
+//require("./app/controllers/dialogflow.controller")(app);
 
 
 // set port, listen for requests
@@ -60,209 +61,7 @@ function initial() {
 
 
 
-/******************************* */
-    
-/*app.post("/echo", function(req, res) {
-    var speech =
-      req.body.queryResult &&
-      req.body.queryResult.parameters &&
-      req.body.queryResult.parameters.echoText
-        ? req.body.queryResult.parameters.echoText
-        : "Seems like some problem. Speak again.";
-    
-    var speechResponse = {
-      google: {
-        expectUserResponse: true,
-        richResponse: {
-          items: [
-            {
-              simpleResponse: {
-                textToSpeech: speech
-              }
-            }
-          ]
-        }
-      }
-    };
-    
-    return res.json({
-      payload: speechResponse,
-      //data: speechResponse,
-      fulfillmentText: speech,
-      speech: speech,
-      displayText: speech,
-      source: "webhook-echo-sample"
-    });
-  });
-  
-  app.post("/audio", function(req, res) {
-    var speech = "";
-    switch (req.body.result.parameters.AudioSample.toLowerCase()) {
-      //Speech Synthesis Markup Language 
-      case "music one":
-        speech =
-          '<speak><audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-        break;
-      case "music two":
-        speech =
-          '<speak><audio clipBegin="1s" clipEnd="3s" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-        break;
-      case "music three":
-        speech =
-          '<speak><audio repeatCount="2" soundLevel="-15db" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-        break;
-      case "music four":
-        speech =
-          '<speak><audio speed="200%" src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio></speak>';
-        break;
-      case "music five":
-        speech =
-          '<audio src="https://actions.google.com/sounds/v1/cartoon/slide_whistle.ogg">did not get your audio file</audio>';
-        break;
-      case "delay":
-        speech =
-          '<speak>Let me take a break for 3 seconds. <break time="3s"/> I am back again.</speak>';
-        break;
-      //https://www.w3.org/TR/speech-synthesis/#S3.2.3
-      case "cardinal":
-        speech = '<speak><say-as interpret-as="cardinal">12345</say-as></speak>';
-        break;
-      case "ordinal":
-        speech =
-          '<speak>I stood <say-as interpret-as="ordinal">10</say-as> in the class exams.</speak>';
-        break;
-      case "characters":
-        speech =
-          '<speak>Hello is spelled as <say-as interpret-as="characters">Hello</say-as></speak>';
-        break;
-      case "fraction":
-        speech =
-          '<speak>Rather than saying 24+3/4, I should say <say-as interpret-as="fraction">24+3/4</say-as></speak>';
-        break;
-      case "bleep":
-        speech =
-          '<speak>I do not want to say <say-as interpret-as="bleep">F&%$#</say-as> word</speak>';
-        break;
-      case "unit":
-        speech =
-          '<speak>This road is <say-as interpret-as="unit">50 foot</say-as> wide</speak>';
-        break;
-      case "verbatim":
-        speech =
-          '<speak>You spell HELLO as <say-as interpret-as="verbatim">hello</say-as></speak>';
-        break;
-      case "date one":
-        speech =
-          '<speak>Today is <say-as interpret-as="date" format="yyyymmdd" detail="1">2017-12-16</say-as></speak>';
-        break;
-      case "date two":
-        speech =
-          '<speak>Today is <say-as interpret-as="date" format="dm" detail="1">16-12</say-as></speak>';
-        break;
-      case "date three":
-        speech =
-          '<speak>Today is <say-as interpret-as="date" format="dmy" detail="1">16-12-2017</say-as></speak>';
-        break;
-      case "time":
-        speech =
-          '<speak>It is <say-as interpret-as="time" format="hms12">2:30pm</say-as> now</speak>';
-        break;
-      case "telephone one":
-        speech =
-          '<speak><say-as interpret-as="telephone" format="91">09012345678</say-as> </speak>';
-        break;
-      case "telephone two":
-        speech =
-          '<speak><say-as interpret-as="telephone" format="1">(781) 771-7777</say-as> </speak>';
-        break;
-      // https://www.w3.org/TR/2005/NOTE-ssml-sayas-20050526/#S3.3
-      case "alternate":
-        speech =
-          '<speak>IPL stands for <sub alias="indian premier league">IPL</sub></speak>';
-        break;
-    }
-    return res.json({
-      speech: speech,
-      displayText: speech,
-      source: "webhook-echo-sample"
-    });
-  });
-  
-  app.post("/video", function(req, res) {
-    return res.json({
-      speech:
-        '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>',
-      displayText:
-        '<speak>  <audio src="https://www.youtube.com/watch?v=VX7SSnvpj-8">did not get your MP3 audio file</audio></speak>',
-      source: "webhook-echo-sample"
-    });
-  });
-  
-  app.post("/slack-test", function(req, res) {
-    var slack_message = {
-      text: "Details of JIRA board for Browse and Commerce",
-      attachments: [
-        {
-          title: "JIRA Board",
-          title_link: "http://www.google.com",
-          color: "#36a64f",
-  
-          fields: [
-            {
-              title: "Epic Count",
-              value: "50",
-              short: "false"
-            },
-            {
-              title: "Story Count",
-              value: "40",
-              short: "false"
-            }
-          ],
-  
-          thumb_url:
-            "https://stiltsoft.com/blog/wp-content/uploads/2016/01/5.jira_.png"
-        },
-        {
-          title: "Story status count",
-          title_link: "http://www.google.com",
-          color: "#f49e42",
-  
-          fields: [
-            {
-              title: "Not started",
-              value: "50",
-              short: "false"
-            },
-            {
-              title: "Development",
-              value: "40",
-              short: "false"
-            },
-            {
-              title: "Development",
-              value: "40",
-              short: "false"
-            },
-            {
-              title: "Development",
-              value: "40",
-              short: "false"
-            }
-          ]
-        }
-      ]
-    };
-    return res.json({
-      speech: "speech",
-      displayText: "speech",
-      source: "webhook-echo-sample",
-      data: {
-        slack: slack_message
-      }
-    });
-  });
-  */
+
 
  const dialogflow = require('@google-cloud/dialogflow');
  const uuid = require('uuid');
@@ -271,6 +70,7 @@ function initial() {
   * Send a query to the dialogflow agent, and return the query result.
   * @param {string} projectId The project to be used
   */
+ 
  async function runSample(projectId = 'peritumbot-uvbc') {
    // A unique identifier for the given session
    const sessionId = uuid.v4();
@@ -287,7 +87,7 @@ function initial() {
      queryInput: {
        text: {
          // The query to send to the dialogflow agent
-         text: 'I want to learn flutter',
+         text: 'mohamed',
          // The language used by the client (en-US)
          languageCode: 'en-US',
        },
@@ -307,4 +107,313 @@ function initial() {
    }
  }
  
- runSample()
+ runSample();
+
+ const quizAngular = new Map([['What will be the result of the program below?', '101'],
+ ['In Angular, you can pass data from parent component to child component using ...', 'Input'],
+ ['In Angular, you can pass data from the child component to the parent component using ...', 'Output'],
+ ['A directive, which modifies the DOM hierarchy, is called ...','Structural directive'],
+ ['In Angular routing, the bottom tag is used to make the corresponding component via an active route.','<router>']]);
+ 
+  
+
+
+
+ global.skills = []
+ const dfff = require('dialogflow-fulfillment');
+const { skill } = require("./app/models");
+ app.post("/", (req, res) => {
+  const agent = new dfff.WebhookClient({
+    request : req,
+    response : res
+  });
+
+  
+  function userName(agent){
+    var name = agent.context.get("await_name").parameters['person'].name;
+
+    console.log(name);
+
+    agent.add("Nice to meet you "+ name + ", What is your email address ?")
+
+
+    /*const response = {
+      "richContent": [
+        [
+          {
+            "type": "accordion",
+            "title": "Accordion title",
+            "subtitle": "Accordion subtitle",
+            "image": {
+              "src": {
+                "rawUrl": "https://example.com/images/logo.png"
+              }
+            },
+            "text": "Accordion text"
+          }
+        ]
+      ]
+    };
+    agent.add(new dfff.Payload(agent.UNSPECIFIED, response, { rawPayload: true, sendAsMessage: true}));*/
+  }
+  
+  function userEmail(agent){
+    var email = agent.context.get("await_email").parameters['email'];
+
+    console.log(email);
+
+    agent.add("whats your date of birth ?")
+  }
+  
+  function userBirthday(agent){
+    var birthday = agent.context.get("await_birthdayDate");
+
+    console.log(birthday);
+
+    agent.add("What is your gender ?")
+  }
+  
+  function userCountry(agent){
+    var country = agent.context.get("await_country").parameters['geo-country'];
+
+    console.log(country);
+
+    //agent.add("whats your date of birth ?")
+  }
+  function userSkills(agent){
+    var exist = 0;
+    var skill = agent.context.get("await_skills").parameters['skillType'];
+
+    console.log(skill);
+
+    skills.forEach(function(item, index, array) {
+      if(item==skill){
+        exist = 1;
+      }
+    });
+    if(exist==0){
+      skills.push(skill)
+    }
+
+    
+    console.log(skills.length);
+    skills.forEach(function(item, index, array) {
+      console.log(item, index);
+    });
+    
+  }
+
+  function userQuiz(agent){
+
+    if(skills.length==1){
+      agent.add("okay great! you have "+ skills.toString()+" quiz waiting for you! to start the quiz type 'begin "+skills.toString()+"' " )
+    }else{
+      agent.add("okay great! you have "
+      + skills.length+ " skills : " 
+      + skills.toString() +
+       ", so you have "+ skills.length+
+        " Quizs, which skill you want to test first ")
+    }
+    
+  }
+
+  /********************************************************************** */
+
+  var q1,q2,q3,q4,q5;
+  
+  
+  function angularQuestion2(agent){
+    
+    
+    skills.forEach(function(item, index, array) {
+      if(item=="Angular"){
+        skills.splice(index, 1)
+      }
+    });
+
+    
+    console.log(skills);
+    q1 = agent.context.get("angular_q1").parameters['any']
+
+    /*if(quizAngular.get(1)==q1){
+      global.r1 = 1;
+    }
+    else r1 = 0;
+    console.log(quizAngular.get(1));*/
+    console.log(q1);
+    console.log(r1);
+
+    if(q1=='101'){
+      global.r1 = 1;
+    }else r1 = 0;
+    
+  }
+  
+
+  function angularQuestion3(agent){
+    q2 = agent.context.get("angular_q2").parameters['any']
+
+    console.log(q2);
+    if(q2=='Input'){
+      global.r2 = 1 ;
+    }else global.r2 = 0;
+
+  }
+
+
+  function angularQuestion4(agent){
+    q3 = agent.context.get("angular_q3").parameters['any']
+
+    console.log(q3);
+
+    if(q3=='Output'){
+      global.r3 = 1 ;
+    }else global.r3 = 0;
+  }
+
+  function angularQuestion5(agent){
+    q4 = agent.context.get("angular_q4").parameters['any']
+
+    console.log(q4);
+
+    if(q4=='Attribute directive'){
+      global.r4 = 1 ;
+    }else global.r4 = 0;
+  }
+  
+  function angularResult(agent){
+    q5 = agent.context.get("angular_q5").parameters['any']
+
+    console.log(q5);
+
+    if(q5=='<router>'){
+      global.r5 = 1 ;
+    }else global.r5 = 0;
+    
+    result = r1+r2+r3+r4+r5
+    console.log(result);
+    
+    if((result)<4){
+      agent.add("Your score is "+result+" ! Sorry you didn't pass the test")
+    }else{
+      agent.add("Your score is "+result+" ! Congratulations you pass the test")
+    }
+    
+  }
+
+  /********************************************************************** */
+
+  var qf1,qf2,qf3,qf4,qf5;
+  
+  
+  function bflutterQuestion2(agent){
+
+    skills.forEach(function(item, index, array) {
+      if(item=="Flutter"){
+        skills.splice(index, 1)
+      }
+    });
+    console.log(skills);
+
+    qf1 = agent.context.get("flutter_q1").parameters['any']
+
+    console.log(qf1);
+
+    if(qf1=='A'){
+      global.rf1 = 1;
+    }else rf1 = 0;
+    
+  }
+  
+
+  function bflutterQuestion3(agent){
+    qf2 = agent.context.get("flutter_q2").parameters['any']
+
+    console.log(qf2);
+    if(qf2=='B'){
+      global.rf2 = 1 ;
+    }else global.rf2 = 0;
+
+  }
+
+
+  function bflutterQuestion4(agent){
+    qf3 = agent.context.get("flutter_q3").parameters['any']
+
+    console.log(qf3);
+
+    if(qf3=='Air plane mode'){
+      global.rf3 = 1 ;
+    }else global.rf3 = 0;
+  }
+
+  function bflutterQuestion5(agent){
+    qf4 = agent.context.get("flutter_q4").parameters['any']
+
+    console.log(qf4);
+
+    if(qf4=='C'){
+      global.rf4 = 1 ;
+    }else global.rf4 = 0;
+  }
+  
+  function bflutterResult(agent){
+    qf5 = agent.context.get("flutter_q5").parameters['any']
+
+    console.log(qf5);
+
+    if(qf5=='SQlite'){
+      global.rf5 = 1 ;
+    }else global.rf5 = 0;
+    
+    result = rf1+rf2+rf3+rf4+rf5
+    console.log(result);
+    if((result)<4){
+      agent.add("Your score is "+result+" ! Sorry you didn't pass the test")
+    }else{
+      agent.add("Your score is "+result+" ! Congratulations you pass the test")
+    }
+    if (skills.length==0){
+      agent.add("You finish all the quizs")
+    }else if(skills.length==1){
+      agent.add("last one! "+ skills.toString()+" quiz waiting for you! to start the quiz type 'begin "+skills.toString()+"' " )
+    }else{
+      agent.add("you still have "
+      + skills.length+ " skills : " 
+      + skills.toString() +
+       ", so you have "+ skills.length+
+        " Quizs, which skill you want to test")
+    }
+    
+  }
+
+
+  var intentMap = new Map();
+
+  /**************************************************/
+  intentMap.set('user.provides.name', userName)
+  intentMap.set('user.provides.email', userEmail)
+  intentMap.set('user.provides.birthday', userBirthday)
+  intentMap.set('user.provides.country', userCountry)
+  intentMap.set('user.provide.skills', userSkills)
+  intentMap.set('user.provide.noSkill', userQuiz)
+  /**************************************************/
+  intentMap.set('angularQuestion2', angularQuestion2)
+  intentMap.set('angularQuestion3', angularQuestion3)
+  intentMap.set('angularQuestion4', angularQuestion4)
+  intentMap.set('angularQuestion5', angularQuestion5)
+  intentMap.set('angularResult', angularResult)
+  /**************************************************/
+  intentMap.set('bflutterQuestion2', bflutterQuestion2)
+  intentMap.set('bflutterQuestion3', bflutterQuestion3)
+  intentMap.set('bflutterQuestion4', bflutterQuestion4)
+  intentMap.set('bflutterQuestion5', bflutterQuestion5)
+  intentMap.set('bflutterResult', bflutterResult)
+  /**************************************************/
+
+  agent.handleRequest(intentMap);
+
+
+  
+
+});

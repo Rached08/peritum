@@ -158,8 +158,25 @@ exports.updateUser = (req, res) => {
      // user.password= bcrypt.hashSync(req.body.password, 8)
  
     });
+
+
 };
 
-
+exports.send = (req, res) => {
+  if(req.body.content=="hi"){
+    res.status(200).send({content: "hi, how are you?",image: "assets/images/bot.png", date: Date.now()});
+    return;
+  } 
+  if(req.body.content=="i am fine"){
+    res.status(200).send({content: "great! are you ready for an interview?",image: "assets/images/bot.png", date: Date.now()});
+    return;
+  } 
+  if(req.body.content=="yes"){
+    res.status(200).send({content: "great!, let's start",image: "assets/images/bot.png", date: Date.now()});
+    return;
+  } 
+  res.status(200).send("message");
+    return;
+}
 
 

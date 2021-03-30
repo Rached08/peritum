@@ -1,6 +1,6 @@
 const controller = require("../controllers/auth.controller");
 const { verifySignUp } = require("../middlewares");
-
+const controllerChat = require("../controllers/dialogflow.controller");
 module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(
@@ -24,4 +24,5 @@ module.exports = function(app) {
   app.post("/api/auth/getuser", controller.getUser);
   
 
+  app.post("/api/auth/send", controller.send);
 };
