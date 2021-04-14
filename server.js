@@ -63,52 +63,6 @@ function initial() {
 
 
 
- const dialogflow = require('@google-cloud/dialogflow');
- const uuid = require('uuid');
- 
- /**
-  * Send a query to the dialogflow agent, and return the query result.
-  * @param {string} projectId The project to be used
-  */
- 
- async function runSample(projectId = 'peritumbot-uvbc') {
-   // A unique identifier for the given session
-   const sessionId = uuid.v4();
- 
-   // Create a new session
-   const sessionClient = new dialogflow.SessionsClient({
-       keyFilename:"D:/Users/EVADAM/Desktop/backend-Mohamed/peritumbot-uvbc-4051f4e9b03c.json"
-   });
-   const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
- 
-   // The text query request.
-   const request = {
-     session: sessionPath,
-     queryInput: {
-       text: {
-         // The query to send to the dialogflow agent
-         text: 'mohamed',
-         // The language used by the client (en-US)
-         languageCode: 'en-US',
-       },
-     },
-   };
- 
-   // Send request and log result
-   const responses = await sessionClient.detectIntent(request);
-   console.log('Detected intent');
-   const result = responses[0].queryResult;
-   console.log(`  Query: ${result.queryText}`);
-   console.log(`  Response: ${result.fulfillmentText}`);
-   if (result.intent) {
-     console.log(`  Intent: ${result.intent.displayName}`);
-   } else {
-     console.log(`  No intent matched.`);
-   }
- }
- 
- runSample();
-
  const quizAngular = new Map([['What will be the result of the program below?', '101'],
  ['In Angular, you can pass data from parent component to child component using ...', 'Input'],
  ['In Angular, you can pass data from the child component to the parent component using ...', 'Output'],
@@ -121,7 +75,6 @@ function initial() {
 
  global.skills = []
  const dfff = require('dialogflow-fulfillment');
-const { skill } = require("./app/models");
  app.post("/", (req, res) => {
   const agent = new dfff.WebhookClient({
     request : req,
@@ -244,7 +197,7 @@ const { skill } = require("./app/models");
     console.log(r1);
 
 
-    
+      
     if(q1=='101'){
       global.r1 = 1;
     }else r1 = 0;
@@ -393,6 +346,7 @@ const { skill } = require("./app/models");
   var intentMap = new Map();
 
   /**************************************************/
+ // intentMap.set('Default Welcome Intent', welcome)
   intentMap.set('user.provides.name', userName)
   intentMap.set('user.provides.email', userEmail)
   intentMap.set('user.provides.birthday', userBirthday)
@@ -418,4 +372,52 @@ const { skill } = require("./app/models");
 
   
 
+});
+
+
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const documents = {};
+
+
+
+
+io.on('connection', socket => {
+  let previousId;
+
+  const safeJoin = currentId => {
+    socket.leave(previousId);
+    socket.join(currentId, () => console.log(`Socket ${socket.id} joined room ${currentId}`));
+    previousId = currentId;
+  };
+
+  socket.on("getDoc", docId => {
+    safeJoin(docId);
+    socket.emit("document", documents[docId]);
+  });
+
+  socket.on("addDoc", doc => {
+    documents[doc.id] = doc;
+    safeJoin(doc.id);
+    io.emit("documents", Object.keys(documents));
+    socket.emit("document", doc);
+  });
+
+  socket.on("editDoc", doc => {
+    documents[doc.id] = doc;
+    socket.to(doc.id).emit("document", doc);
+  });
+
+
+  socket.on('message', (msg) => {
+    console.log("aaaa",msg);
+    socket.broadcast.emit('message-broadcast', msg);
+   });
+
+  io.emit("documents", Object.keys(documents));
+  console.log(`Socket ${socket.id} has connected`);
+});
+
+http.listen(4444, () => {
+  console.log('Listening on port 4444');
 });
